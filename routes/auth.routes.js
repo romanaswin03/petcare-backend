@@ -30,6 +30,10 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
+    console.log('Incoming login data:', email, password);
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
     const user = await User.findOne({ email});
     if (!user || !(await user.comparePassword(password))) {
       return res.status(400).json({ message: 'Invalid credentials' });
@@ -39,6 +43,8 @@ router.post('/login', async (req, res) => {
     });
     res.json({ token, user: { id: user._id, name: user.name, role: user.role } });
   } catch (err) {
+    console.error('Login error', err);
+    
     res.status(500).json({ message: 'Server error' });
   }
 });

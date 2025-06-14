@@ -22,17 +22,14 @@ app.use(cors({
 app.options('*catchall', (req, res) => {
     res.sendStatus(404).send(`Cannot find ${req.originalUrl}`);
 });
-// app.use((req, res, next)=>{
-//     res.header('Access-Control-Allow-Headers',
-//         'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-//     );
-//     next();
-// });
+
 
 app.use((req, res, next) => {
     console.log('Headers: ',{
-        authorization: req.headers.authorization,
-        origin: req.headers.origin
+        authorization: req.headers.authorization || 'none',
+        origin: req.headers.origin || 'none',
+        method: req.method,
+        path: req.path
     });
     next();
 });
